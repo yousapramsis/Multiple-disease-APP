@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'AboutUsPage.dart';
-import 'diabetes_test_page.dart'; // Import DiabetesTestPage
-import 'hypertension_test_page.dart'; // Import HypertensionTestPage
-import 'heart_diseases_test_page.dart'; // Import HeartDiseasesTestPage
+import 'AboutUs/AboutUsPage.dart';
+import 'Diseases/Diabetes/diabetes_symptoms_screen.dart'
+    show DiabetesSymptomsScreen;
+import 'Diseases/Heart/heart_diseases_test_page.dart';
+import 'Diseases/Hypertention/hypertension_test_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -168,14 +169,15 @@ class MyHomePage extends StatelessWidget {
                             icon: Icons.bloodtype,
                             color1: Color.fromARGB(255, 238, 255, 0),
                             color2: Color.fromARGB(255, 132, 155, 2),
-                            route: DiabetesTestPage(), // Use imported class
+                            route:
+                                DiabetesSymptomsScreen(), // Route to symptoms screen first
                           ),
                           DiseaseCard(
                             title: 'Hypertension',
                             icon: Icons.monitor_heart,
                             color1: Color.fromARGB(255, 71, 85, 209),
                             color2: Color.fromARGB(255, 66, 86, 231),
-                            route: HypertensionTestPage(), // Use imported class
+                            route: HypertensionTestPage(),
                           ),
                           DiseaseCard(
                             title: 'Heart Health',
@@ -183,8 +185,7 @@ class MyHomePage extends StatelessWidget {
                             color1:
                                 Color(0xFFF44336), // Red Color for Heart Health
                             color2: Color(0xFFE57373), // Lighter Red
-                            route:
-                                HeartDiseasesTestPage(), // Use imported class
+                            route: HeartDiseasesTestPage(),
                           ),
                           SizedBox(width: 20),
                         ],
