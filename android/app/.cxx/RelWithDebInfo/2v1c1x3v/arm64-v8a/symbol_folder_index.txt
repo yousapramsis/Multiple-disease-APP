@@ -1,0 +1,1 @@
+C:\Users\FreeComp\StudioProjects\Multiple-disease-APP\build\app\intermediates\cxx\RelWithDebInfo\2v1c1x3v\obj\arm64-v8a
