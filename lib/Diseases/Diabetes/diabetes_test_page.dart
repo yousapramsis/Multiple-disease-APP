@@ -41,7 +41,8 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
     try {
       final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
       if (!manifest.listAssets().contains('assets/modelaferconvert.tflite')) {
-        throw Exception('Model file not found in assets. Check pubspec.yaml and assets folder.');
+        throw Exception(
+            'Model file not found in assets. Check pubspec.yaml and assets folder.');
       }
       _interpreter = await Interpreter.fromAsset(
         'assets/modelaferconvert.tflite',
@@ -72,7 +73,8 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
       appBar: AppBar(
         title: const Text(
           'Diabetes Test',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white),
         ),
         centerTitle: true,
         flexibleSpace: Container(
@@ -135,11 +137,15 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
       ),
       child: Column(
         children: [
-          const Icon(Icons.medical_services, size: 50, color: Color(0xFF6C63FF)),
+          const Icon(Icons.medical_services,
+              size: 50, color: Color(0xFF6C63FF)),
           const SizedBox(height: 15),
           const Text(
             'Diabetes Risk Assessment',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2D2D3A)),
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2D2D3A)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
@@ -161,32 +167,39 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
         _buildNumberInput(
           controller: ageController,
           label: 'Age',
-          validator: (v) => _validateRange(v, _normParams['age']!['min']!, _normParams['age']!['max']!),
+          validator: (v) => _validateRange(
+              v, _normParams['age']!['min']!, _normParams['age']!['max']!),
         ),
         const SizedBox(height: 12),
-        _buildCheckbox('Hypertension', hasHypertension, (v) => setState(() => hasHypertension = v ?? false)),
-        _buildCheckbox('Heart Disease', hasHeartDisease, (v) => setState(() => hasHeartDisease = v ?? false)),
+        _buildCheckbox('Hypertension', hasHypertension,
+            (v) => setState(() => hasHypertension = v ?? false)),
+        _buildCheckbox('Heart Disease', hasHeartDisease,
+            (v) => setState(() => hasHeartDisease = v ?? false)),
         const SizedBox(height: 12),
         _buildNumberInput(
           controller: bmiController,
           label: 'BMI',
-          validator: (v) => _validateRange(v, _normParams['bmi']!['min']!, _normParams['bmi']!['max']!),
+          validator: (v) => _validateRange(
+              v, _normParams['bmi']!['min']!, _normParams['bmi']!['max']!),
         ),
         const SizedBox(height: 12),
         _buildNumberInput(
           controller: hba1cController,
           label: 'HbA1c (%)',
-          validator: (v) => _validateRange(v, _normParams['hba1c']!['min']!, _normParams['hba1c']!['max']!),
+          validator: (v) => _validateRange(
+              v, _normParams['hba1c']!['min']!, _normParams['hba1c']!['max']!),
         ),
         const SizedBox(height: 12),
         _buildNumberInput(
           controller: glucoseController,
           label: 'Glucose (mg/dL)',
-          validator: (v) => _validateRange(v, _normParams['glucose']!['min']!, _normParams['glucose']!['max']!),
+          validator: (v) => _validateRange(v, _normParams['glucose']!['min']!,
+              _normParams['glucose']!['max']!),
         ),
         const SizedBox(height: 24),
         ElevatedButton(
-          onPressed: _isModelLoaded && !_isProcessing ? _handlePrediction : null,
+          onPressed:
+              _isModelLoaded && !_isProcessing ? _handlePrediction : null,
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
             backgroundColor: const Color(0xFF6C63FF),
@@ -196,7 +209,8 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
           ),
           child: _isProcessing
               ? const CircularProgressIndicator(color: Colors.white)
-              : const Text('Check Risk', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              : const Text('Check Risk',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ),
       ],
     );
@@ -235,11 +249,14 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
         fillColor: Colors.white,
       ),
       validator: validator,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))],
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+      ],
     );
   }
 
-  Widget _buildCheckbox(String label, bool value, ValueChanged<bool?> onChanged) {
+  Widget _buildCheckbox(
+      String label, bool value, ValueChanged<bool?> onChanged) {
     return Row(
       children: [
         Checkbox(
@@ -294,7 +311,9 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
                   fontWeight: FontWeight.bold,
                   color: result.startsWith('Positive')
                       ? Colors.red
-                      : (result.startsWith('Negative') ? Colors.green : Colors.grey),
+                      : (result.startsWith('Negative')
+                          ? Colors.green
+                          : Colors.grey),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -320,7 +339,8 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
           result,
-          style: const TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
       ),
@@ -351,13 +371,10 @@ class _DiabetesTestPageState extends State<DiabetesTestPage> {
       _interpreter.run(input, output);
 
       final probability = output[0][0];
-      
 
       setState(() {
         probabilityValue = probability;
-        result = probability >= 0.5
-            ? 'Positive '
-            : 'Negative ';
+        result = probability >= 0.5 ? 'Positive ' : 'Negative ';
       });
     } catch (e) {
       setState(() => result = 'Prediction failed. Check inputs');
