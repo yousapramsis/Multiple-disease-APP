@@ -69,8 +69,18 @@ flutter:
 
 
   assets:
-  - assets/health_icon.png
-  - assets/modelaferconvert.tflite
+  - assets/assets/slide1.png
+  - assets/assets/slide2.png
+  - assets/assets/slide3.png
+  - assets/assets/slide4.png
+  - assets/assets/slide5.png
+  - assets/assets/slide6.png
+  - assets/assets/slide7.png
+  - assets/assets/slide8.png
+  - assets/assets/slide9.png
+  - assets/assets/slide10.png
+  - assets/assets/modelaferconvert.tflite
+
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

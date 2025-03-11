@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:project_grad/Home/widgets/diseases_card.dart';
 
@@ -6,15 +8,81 @@ import '../Diseases/Diabetes/diabetes_symptoms_screen.dart';
 import '../Diseases/Heart/heart_diseases_test_page.dart';
 import '../Diseases/Hypertention/hypertension_test_page.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _currentPage = 0;
+  final PageController _pageController = PageController();
+  Timer? _timer;
+  final List<String> _healthAdvices = [
+    "Stay hydrated by drinking plenty of water.",
+    "Eat a balanced diet rich in fruits and vegetables.",
+    "Exercise regularly to maintain a healthy weight.",
+    "Get enough sleep each night.",
+    "Manage stress through relaxation techniques.",
+    "Limit your intake of processed foods and sugary drinks.",
+    "Avoid smoking and excessive alcohol consumption.",
+    "Get regular checkups with your doctor.",
+    "Maintain a healthy social life and strong relationships.",
+    "Practice good hygiene to prevent infections.",
+  ];
+  final List<String> _slideImages = [
+    'assets/assets/slide1.png', // Replace with your actual image paths
+    'assets/assets/slide2.png',
+    'assets/assets/slide3.png',
+    'assets/assets/slide4.png',
+    'assets/assets/slide5.png',
+    'assets/assets/slide6.png',
+    'assets/assets/slide7.png',
+    'assets/assets/slide8.png',
+    'assets/assets/slide9.png',
+    'assets/assets/slide10.png',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_currentPage < _slideImages.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0; // Loop back to the first slide
+      }
+      // Animate to the next page.  Use animateToPage for smooth scrolling.
+      if (_pageController.hasClients) {
+        // Check if the controller is attached
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.ease, // Smooth animation
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -24,7 +92,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
         ),
-        title: Text(title),
+        title: Text(widget.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.history),
@@ -51,36 +119,27 @@ class MyHomePage extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
+                flex: 6,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _slideImages.length,
+                  onPageChanged: (int page) {
+                    setState(() {
+                      _currentPage = page; // Update current page index
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return buildSlideItem(index); // Use the helper method
+                  },
+                ),
+              ),
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/health_icon.png',
-                        height: 180,
-                      ),
                       const SizedBox(height: 30),
-                      const Text(
-                        'Early Detection Saves Lives',
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D2D3A),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        'Assess your health risks with our AI-powered predictive models. '
-                        'Results are indicative - always consult a healthcare professional.',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF5A5A5A),
-                          height: 1.5,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
                     ],
                   ),
                 ),
@@ -134,9 +193,10 @@ class MyHomePage extends StatelessWidget {
                           const DiseaseCard(
                             title: 'Heart Health',
                             icon: Icons.favorite,
-                            color1:
-                                Color(0xFFF44336), // Red Color for Heart Health
-                            color2: Color(0xFFE57373), // Lighter Red
+                            color1: Color(0xFFF44336),
+                            // Red Color for Heart Health
+                            color2: Color(0xFFE57373),
+                            // Lighter Red
                             route: HeartDiseasesTestPage(),
                           ),
                           const SizedBox(width: 20),
@@ -158,6 +218,32 @@ class MyHomePage extends StatelessWidget {
       const SnackBar(
         content: Text('Feature coming soon!'),
         duration: Duration(seconds: 1),
+      ),
+    );
+  }
+
+  // Helper method to build each slide item
+  Widget buildSlideItem(int index) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(_slideImages[index],
+              height: 200), // Adjust height as needed
+          const SizedBox(height: 30),
+          Text(
+            _healthAdvices[index],
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D2D3A),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 15),
+          // Optional: Add "next/previous" indicators or dots here.
+        ],
       ),
     );
   }
